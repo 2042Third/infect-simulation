@@ -1,0 +1,167 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Recoveries</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: Recoveries (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Recoveries</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import jdk.management.jfr.RecordingInfo;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import java.util.*;
+<i class="no-highlight">4</i>&nbsp;import java.util.concurrent.*;
+<i class="no-highlight">5</i>&nbsp;import java.util.concurrent.atomic.*;
+<i class="no-highlight">6</i>&nbsp;/**
+<i class="no-highlight">7</i>&nbsp; * To have better performance, recovery or death checking and setting
+<i class="no-highlight">8</i>&nbsp; * is running on a different thread.
+<i class="no-highlight">9</i>&nbsp; * */
+<i class="no-highlight">10</i>&nbsp;public class Recoveries implements Runnable {
+<i class="no-highlight">11</i>&nbsp;  /**
+<i class="no-highlight">12</i>&nbsp;   * infected sim field
+<i class="no-highlight">13</i>&nbsp;   * */
+<i class="no-highlight">14</i>&nbsp;  InfectSim parent;
+<i class="no-highlight">15</i>&nbsp;
+<i class="no-highlight">16</i>&nbsp;  /**
+<i class="no-highlight">17</i>&nbsp;   * Initializes the recovery checking
+<i class="no-highlight">18</i>&nbsp;   * */
+<b class="fc"><i class="no-highlight">19</i>&nbsp;  public Recoveries (InfectSim a){</b>
+<b class="fc"><i class="no-highlight">20</i>&nbsp;    parent = a;</b>
+<i class="no-highlight">21</i>&nbsp;  }
+<i class="no-highlight">22</i>&nbsp;
+<i class="no-highlight">23</i>&nbsp;  /**
+<i class="no-highlight">24</i>&nbsp;   * Checks all the infected subjects, cur_infected;
+<i class="no-highlight">25</i>&nbsp;   * if the subjects rounds-since-infection &gt;= k_count:
+<i class="no-highlight">26</i>&nbsp;   * the subject will have k_prob chance of recovery,
+<i class="no-highlight">27</i>&nbsp;   * else death
+<i class="no-highlight">28</i>&nbsp;   * */
+<i class="no-highlight">29</i>&nbsp;  public void run(){
+<b class="fc"><i class="no-highlight">30</i>&nbsp;    for(String i: parent.cur_infected.keySet()){</b>
+<b class="fc"><i class="no-highlight">31</i>&nbsp;      if((parent.cur_stat.get(i).get()==1)&amp;&amp;</b>
+<b class="fc"><i class="no-highlight">32</i>&nbsp;      (-parent.cur_infected.get(i)+parent.r_n)&gt;= parent.k_count){</b>
+<b class="fc"><i class="no-highlight">33</i>&nbsp;        if(rd_(parent.k_prob))</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;          per_recovery(i);</b>
+<i class="no-highlight">35</i>&nbsp;        else
+<b class="fc"><i class="no-highlight">36</i>&nbsp;          per_death(i);</b>
+<i class="no-highlight">37</i>&nbsp;      }
+<b class="fc"><i class="no-highlight">38</i>&nbsp;    }</b>
+<i class="no-highlight">39</i>&nbsp;  }
+<i class="no-highlight">40</i>&nbsp;  /**
+<i class="no-highlight">41</i>&nbsp;   * Random resolve
+<i class="no-highlight">42</i>&nbsp;   * @return true if a &gt; then random value, else false
+<i class="no-highlight">43</i>&nbsp;   * */
+<i class="no-highlight">44</i>&nbsp;  public Boolean rd_(double a){
+<b class="fc"><i class="no-highlight">45</i>&nbsp;    return parent.rdm_val.nextDouble() &lt;= a;</b>
+<i class="no-highlight">46</i>&nbsp;  }
+<i class="no-highlight">47</i>&nbsp;
+<i class="no-highlight">48</i>&nbsp;  /**
+<i class="no-highlight">49</i>&nbsp;   * Per recovery precedure
+<i class="no-highlight">50</i>&nbsp;   * */
+<i class="no-highlight">51</i>&nbsp;  public void per_recovery(Object a){
+<b class="fc"><i class="no-highlight">52</i>&nbsp;    parent.cur_stat.get(a).set(2);</b>
+<b class="fc"><i class="no-highlight">53</i>&nbsp;    parent.r_count++;</b>
+<i class="no-highlight">54</i>&nbsp;  }
+<i class="no-highlight">55</i>&nbsp;  /**
+<i class="no-highlight">56</i>&nbsp;   * Per death precedure
+<i class="no-highlight">57</i>&nbsp;   * */
+<i class="no-highlight">58</i>&nbsp;  public void per_death(Object a){
+<b class="fc"><i class="no-highlight">59</i>&nbsp;    parent.cur_stat.get(a).set(-1);</b>
+<b class="fc"><i class="no-highlight">60</i>&nbsp;    parent.d_count++;</b>
+<i class="no-highlight">61</i>&nbsp;  }
+<i class="no-highlight">62</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-08-12 22:34</div>
+</div>
+</body>
+</html>

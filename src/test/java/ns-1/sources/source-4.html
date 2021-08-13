@@ -1,0 +1,610 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > DisplayGraphics</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: DisplayGraphics (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DisplayGraphics</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    41.7%
+  </span>
+  <span class="absValue">
+    (10/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65.4%
+  </span>
+  <span class="absValue">
+    (83/127)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import java.awt.*;
+<i class="no-highlight">2</i>&nbsp;import java.awt.event.*;
+<i class="no-highlight">3</i>&nbsp;import java.util.*;
+<i class="no-highlight">4</i>&nbsp;import java.awt.geom.*;
+<i class="no-highlight">5</i>&nbsp;import javax.swing.*;
+<i class="no-highlight">6</i>&nbsp;import javax.swing.event.*;
+<i class="no-highlight">7</i>&nbsp;import java.io.File;
+<i class="no-highlight">8</i>&nbsp;import javax.swing.filechooser.FileFilter;
+<i class="no-highlight">9</i>&nbsp;import java.awt.Font;
+<i class="no-highlight">10</i>&nbsp;import java.awt.Graphics;
+<i class="no-highlight">11</i>&nbsp;import java.util.concurrent.*;
+<i class="no-highlight">12</i>&nbsp;import java.util.concurrent.atomic.*;
+<i class="no-highlight">13</i>&nbsp;import java.awt.Graphics2D;
+<i class="no-highlight">14</i>&nbsp;import java.awt.RenderingHints;
+<i class="no-highlight">15</i>&nbsp;import java.awt.font.TextAttribute;
+<i class="no-highlight">16</i>&nbsp;import java.text.AttributedString;
+<i class="no-highlight">17</i>&nbsp;import java.net.URL;
+<i class="no-highlight">18</i>&nbsp;import java.util.Random.*;
+<i class="no-highlight">19</i>&nbsp;import java.awt.image.BufferedImage;
+<i class="no-highlight">20</i>&nbsp;import javax.imageio.ImageIO;
+<i class="no-highlight">21</i>&nbsp;
+<i class="no-highlight">22</i>&nbsp;/**
+<i class="no-highlight">23</i>&nbsp;   * Drawing class
+<i class="no-highlight">24</i>&nbsp;   * 
+<i class="no-highlight">25</i>&nbsp;   * */
+<b class="fc"><i class="no-highlight">26</i>&nbsp;public class DisplayGraphics extends JPanel implements Runnable{</b>
+<i class="no-highlight">27</i>&nbsp;
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    // Contains the separator of the clients&#39; specific OS
+<b class="fc"><i class="no-highlight">30</i>&nbsp;    private static String sp = File.separator;</b>
+<i class="no-highlight">31</i>&nbsp;
+<i class="no-highlight">32</i>&nbsp;    // Contains the absolute working directory
+<b class="fc"><i class="no-highlight">33</i>&nbsp;    private static String curDir = System.getProperty(&quot;user.dir&quot;)+sp+&quot;..&quot;;</b>
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;    // Contains the input file path
+<b class="fc"><i class="no-highlight">36</i>&nbsp;    private static String seed_dir_sub = &quot;src&quot;+sp+&quot;main&quot;+sp+&quot;resources&quot;;</b>
+<i class="no-highlight">37</i>&nbsp;
+<i class="no-highlight">38</i>&nbsp;    // Contains the input file path
+<b class="fc"><i class="no-highlight">39</i>&nbsp;    private static String src_dir_sub = &quot;src&quot;+sp+&quot;main&quot;+sp+&quot;java&quot;;</b>
+<i class="no-highlight">40</i>&nbsp;
+<i class="no-highlight">41</i>&nbsp;    // Contains the input file path
+<b class="fc"><i class="no-highlight">42</i>&nbsp;    private static String src_dir = curDir+sp+src_dir_sub;</b>
+<i class="no-highlight">43</i>&nbsp;
+<i class="no-highlight">44</i>&nbsp;    // Contains the input file path
+<b class="fc"><i class="no-highlight">45</i>&nbsp;    private static String seed_dir = curDir+sp+seed_dir_sub;</b>
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * integer thread safe
+<i class="no-highlight">48</i>&nbsp;     * */
+<i class="no-highlight">49</i>&nbsp;    public AtomicInteger it;
+<i class="no-highlight">50</i>&nbsp;     /**
+<i class="no-highlight">51</i>&nbsp;    * width
+<i class="no-highlight">52</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">53</i>&nbsp;    protected int w = 40; </b>
+<i class="no-highlight">54</i>&nbsp;    /**
+<i class="no-highlight">55</i>&nbsp;    * height
+<i class="no-highlight">56</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">57</i>&nbsp;    protected int h = 40; </b>
+<i class="no-highlight">58</i>&nbsp;    /**
+<i class="no-highlight">59</i>&nbsp;    * static width
+<i class="no-highlight">60</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">61</i>&nbsp;    protected static int dw = 50; </b>
+<i class="no-highlight">62</i>&nbsp;    /**
+<i class="no-highlight">63</i>&nbsp;    * static height
+<i class="no-highlight">64</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">65</i>&nbsp;    protected static int dh = 50; </b>
+<i class="no-highlight">66</i>&nbsp;    /**
+<i class="no-highlight">67</i>&nbsp;     * Dot size
+<i class="no-highlight">68</i>&nbsp;     * */
+<b class="fc"><i class="no-highlight">69</i>&nbsp;    protected int dotsz=3;</b>
+<i class="no-highlight">70</i>&nbsp;    /**
+<i class="no-highlight">71</i>&nbsp;    * board absolute x size
+<i class="no-highlight">72</i>&nbsp;    * */
+<i class="no-highlight">73</i>&nbsp;    protected int X;  
+<i class="no-highlight">74</i>&nbsp;    /**
+<i class="no-highlight">75</i>&nbsp;    * board absolute y size
+<i class="no-highlight">76</i>&nbsp;    * */
+<i class="no-highlight">77</i>&nbsp;    protected int Y; 
+<i class="no-highlight">78</i>&nbsp;
+<i class="no-highlight">79</i>&nbsp;    /**
+<i class="no-highlight">80</i>&nbsp;    * default graphics display size for x
+<i class="no-highlight">81</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">82</i>&nbsp;    protected int resx=1280; </b>
+<i class="no-highlight">83</i>&nbsp;    /**
+<i class="no-highlight">84</i>&nbsp;    * default graphics display size for y
+<i class="no-highlight">85</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">86</i>&nbsp;    protected int resy=720; </b>
+<i class="no-highlight">87</i>&nbsp;
+<i class="no-highlight">88</i>&nbsp;    /**
+<i class="no-highlight">89</i>&nbsp;    * changing width of the screen
+<i class="no-highlight">90</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">91</i>&nbsp;    protected int width = this.getWidth(); </b>
+<i class="no-highlight">92</i>&nbsp;    /**
+<i class="no-highlight">93</i>&nbsp;    * changing height of the screen
+<i class="no-highlight">94</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">95</i>&nbsp;    protected int height = this.getHeight(); </b>
+<i class="no-highlight">96</i>&nbsp;
+<i class="no-highlight">97</i>&nbsp;    /**
+<i class="no-highlight">98</i>&nbsp;    * whether history view is open
+<i class="no-highlight">99</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">100</i>&nbsp;    protected boolean hist_view = true; </b>
+<i class="no-highlight">101</i>&nbsp;    /**
+<i class="no-highlight">102</i>&nbsp;    * whether antialiasing is on
+<i class="no-highlight">103</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">104</i>&nbsp;    protected boolean antialias_view = true; </b>
+<i class="no-highlight">105</i>&nbsp;    /**
+<i class="no-highlight">106</i>&nbsp;    * stores history boards, resets after changing the iteration size
+<i class="no-highlight">107</i>&nbsp;    * */
+<i class="no-highlight">108</i>&nbsp;    protected int[][] hist_board ; 
+<i class="no-highlight">109</i>&nbsp;    /**
+<i class="no-highlight">110</i>&nbsp;    * tells where the history view is pointing to 
+<i class="no-highlight">111</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">112</i>&nbsp;    protected int hist_it = 0; </b>
+<i class="no-highlight">113</i>&nbsp;
+<i class="no-highlight">114</i>&nbsp;    /**
+<i class="no-highlight">115</i>&nbsp;    * string for history view
+<i class="no-highlight">116</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">117</i>&nbsp;    protected String hist_string1=&quot;History View&quot;; </b>
+<i class="no-highlight">118</i>&nbsp;    /**
+<i class="no-highlight">119</i>&nbsp;    * string for history view
+<i class="no-highlight">120</i>&nbsp;    * */
+<i class="no-highlight">121</i>&nbsp;    protected ArrayList&lt;Integer&gt; hash_lst; 
+<i class="no-highlight">122</i>&nbsp;    /**
+<i class="no-highlight">123</i>&nbsp;    * string for history view
+<i class="no-highlight">124</i>&nbsp;    * */
+<i class="no-highlight">125</i>&nbsp;    protected ArrayList&lt;String&gt; str_lst; 
+<i class="no-highlight">126</i>&nbsp;    /**
+<i class="no-highlight">127</i>&nbsp;    * string for history view
+<i class="no-highlight">128</i>&nbsp;    * */
+<i class="no-highlight">129</i>&nbsp;    protected Map&lt;String, p&gt; coord_lst; 
+<i class="no-highlight">130</i>&nbsp;    /**
+<i class="no-highlight">131</i>&nbsp;    * string for history view
+<i class="no-highlight">132</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">133</i>&nbsp;    protected Boolean dis_hash_lst = false; </b>
+<i class="no-highlight">134</i>&nbsp;    /**
+<i class="no-highlight">135</i>&nbsp;    * string for history view
+<i class="no-highlight">136</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">137</i>&nbsp;    protected Boolean dis_str_lst = false; </b>
+<i class="no-highlight">138</i>&nbsp;    /**
+<i class="no-highlight">139</i>&nbsp;    * string for current view
+<i class="no-highlight">140</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">141</i>&nbsp;    protected String hist_string2=&quot;Current View&quot;; </b>
+<i class="no-highlight">142</i>&nbsp;    /**
+<i class="no-highlight">143</i>&nbsp;    * string for formating in graphics display
+<i class="no-highlight">144</i>&nbsp;    * */
+<i class="no-highlight">145</i>&nbsp;    protected AttributedString hist1; 
+<i class="no-highlight">146</i>&nbsp;    /**
+<i class="no-highlight">147</i>&nbsp;    * string for formating in graphics display
+<i class="no-highlight">148</i>&nbsp;    * */
+<i class="no-highlight">149</i>&nbsp;    protected AttributedString hist2; 
+<i class="no-highlight">150</i>&nbsp;    /**
+<i class="no-highlight">151</i>&nbsp;    * font of one of the display letters
+<i class="no-highlight">152</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">153</i>&nbsp;    protected Font font1 = new Font(&quot;Serif&quot;, Font.PLAIN, 24); </b>
+<i class="no-highlight">154</i>&nbsp;    /**
+<i class="no-highlight">155</i>&nbsp;     * Enable the un-infected lines
+<i class="no-highlight">156</i>&nbsp;     * */
+<b class="fc"><i class="no-highlight">157</i>&nbsp;    public Boolean enable_uninf=true;</b>
+<i class="no-highlight">158</i>&nbsp;
+<i class="no-highlight">159</i>&nbsp;    /**
+<i class="no-highlight">160</i>&nbsp;    * color palette one
+<i class="no-highlight">161</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">162</i>&nbsp;    protected Color color1 = new Color(150, 148, 0);</b>
+<i class="no-highlight">163</i>&nbsp;    /**
+<i class="no-highlight">164</i>&nbsp;    * color pallete two
+<i class="no-highlight">165</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">166</i>&nbsp;    protected Color color2 = new Color(0, 146, 0); </b>
+<i class="no-highlight">167</i>&nbsp;    /**
+<i class="no-highlight">168</i>&nbsp;    * coolor pallete three
+<i class="no-highlight">169</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">170</i>&nbsp;    protected Color color3 = new Color(255,0,0); </b>
+<i class="no-highlight">171</i>&nbsp;    /**
+<i class="no-highlight">172</i>&nbsp;    * coolor pallete three
+<i class="no-highlight">173</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">174</i>&nbsp;    protected Color color4 = new Color(0, 0, 0);</b>
+<i class="no-highlight">175</i>&nbsp;    /**
+<i class="no-highlight">176</i>&nbsp;    * coolor pallete three
+<i class="no-highlight">177</i>&nbsp;    * */
+<b class="fc"><i class="no-highlight">178</i>&nbsp;    protected Color color5 = new Color(21, 61, 249); </b>
+<i class="no-highlight">179</i>&nbsp;    /**\
+<i class="no-highlight">180</i>&nbsp;     * the parent
+<i class="no-highlight">181</i>&nbsp;     * */
+<i class="no-highlight">182</i>&nbsp;    public Gol_gui parent ; 
+<i class="no-highlight">183</i>&nbsp;    /**
+<i class="no-highlight">184</i>&nbsp;     * out or in
+<i class="no-highlight">185</i>&nbsp;     * */
+<b class="fc"><i class="no-highlight">186</i>&nbsp;    public Boolean outin=true;</b>
+<i class="no-highlight">187</i>&nbsp;    /**
+<i class="no-highlight">188</i>&nbsp;     * out or in
+<i class="no-highlight">189</i>&nbsp;     * */
+<b class="fc"><i class="no-highlight">190</i>&nbsp;    public Boolean dot=true;</b>
+<i class="no-highlight">191</i>&nbsp;
+<i class="no-highlight">192</i>&nbsp;    /**
+<i class="no-highlight">193</i>&nbsp;    * board copy of the display engine
+<i class="no-highlight">194</i>&nbsp;    * */
+<i class="no-highlight">195</i>&nbsp;    private int[][] board; 
+<i class="no-highlight">196</i>&nbsp;
+<i class="no-highlight">197</i>&nbsp;    // Image im1 = new ImageIcon(src_dir+sp+&quot;submitty_logo-min.jpg&quot;).getImage();
+<b class="fc"><i class="no-highlight">198</i>&nbsp;    URL  imgURL = getClass().getResource(&quot;rpi_logo.jpg&quot;); // RPI logo for start-up sequence</b>
+<b class="fc"><i class="no-highlight">199</i>&nbsp;    Image im2 = new ImageIcon(imgURL).getImage(); // RPI logo for start-up sequence</b>
+<i class="no-highlight">200</i>&nbsp;    /**
+<i class="no-highlight">201</i>&nbsp;     * Sets the parent 
+<i class="no-highlight">202</i>&nbsp;     * */
+<i class="no-highlight">203</i>&nbsp;    public void set_parent(Gol_gui a){
+<b class="fc"><i class="no-highlight">204</i>&nbsp;      parent=a;</b>
+<i class="no-highlight">205</i>&nbsp;    }
+<i class="no-highlight">206</i>&nbsp;    /**
+<i class="no-highlight">207</i>&nbsp;     * Truncates/increases the size of a to fit the display of the simulation 
+<i class="no-highlight">208</i>&nbsp;     * @param a - input size 
+<i class="no-highlight">209</i>&nbsp;     * @return - a size that fit the current display 
+<i class="no-highlight">210</i>&nbsp;     * 
+<i class="no-highlight">211</i>&nbsp;     * */
+<i class="no-highlight">212</i>&nbsp;    private int fit(int a){
+<b class="nc"><i class="no-highlight">213</i>&nbsp;      return (a+w+h/2)/(2);</b>
+<i class="no-highlight">214</i>&nbsp;    }
+<i class="no-highlight">215</i>&nbsp;
+<i class="no-highlight">216</i>&nbsp;
+<i class="no-highlight">217</i>&nbsp;
+<i class="no-highlight">218</i>&nbsp;    /**
+<i class="no-highlight">219</i>&nbsp;     * Sets the board to be painted in the next repaint()/paintComponent()
+<i class="no-highlight">220</i>&nbsp;     * @param b - the board to be painted;
+<i class="no-highlight">221</i>&nbsp;     * */
+<i class="no-highlight">222</i>&nbsp;    public void set_board(int[][] b){
+<b class="nc"><i class="no-highlight">223</i>&nbsp;      board = atomic_copy(b);</b>
+<i class="no-highlight">224</i>&nbsp;    }
+<i class="no-highlight">225</i>&nbsp;
+<i class="no-highlight">226</i>&nbsp;    /**
+<i class="no-highlight">227</i>&nbsp;     * Sets the board to be painted in the next repaint()/paintComponent()
+<i class="no-highlight">228</i>&nbsp;     * @param b - the board to be painted;
+<i class="no-highlight">229</i>&nbsp;     * */
+<i class="no-highlight">230</i>&nbsp;    public void set_hist_board(int[][] b){
+<b class="nc"><i class="no-highlight">231</i>&nbsp;      hist_board = atomic_copy(b);</b>
+<i class="no-highlight">232</i>&nbsp;    }    
+<i class="no-highlight">233</i>&nbsp;
+<i class="no-highlight">234</i>&nbsp;    /**
+<i class="no-highlight">235</i>&nbsp;     * Take the list of hash codes, and display the presentation.
+<i class="no-highlight">236</i>&nbsp;     * @param b a list of hash codes
+<i class="no-highlight">237</i>&nbsp;     * 
+<i class="no-highlight">238</i>&nbsp;     * */
+<i class="no-highlight">239</i>&nbsp;    public void display_hash_lst(ArrayList&lt;Integer&gt; b){
+<b class="nc"><i class="no-highlight">240</i>&nbsp;      hash_lst = b;</b>
+<b class="nc"><i class="no-highlight">241</i>&nbsp;      dis_hash_lst=true;</b>
+<i class="no-highlight">242</i>&nbsp;
+<b class="nc"><i class="no-highlight">243</i>&nbsp;      this.repaint();</b>
+<i class="no-highlight">244</i>&nbsp;    }
+<i class="no-highlight">245</i>&nbsp;    /**
+<i class="no-highlight">246</i>&nbsp;     * Take the list of hash codes, and display the presentation.
+<i class="no-highlight">247</i>&nbsp;     * @param b a list of hash codes
+<i class="no-highlight">248</i>&nbsp;     * 
+<i class="no-highlight">249</i>&nbsp;     * */
+<i class="no-highlight">250</i>&nbsp;    public void display_str_lst(ArrayList&lt;String&gt; b){
+<b class="nc"><i class="no-highlight">251</i>&nbsp;      str_lst = b;</b>
+<b class="nc"><i class="no-highlight">252</i>&nbsp;      dis_str_lst=true;</b>
+<b class="nc"><i class="no-highlight">253</i>&nbsp;      gen_coord_lst(b);</b>
+<b class="nc"><i class="no-highlight">254</i>&nbsp;      this.repaint();</b>
+<i class="no-highlight">255</i>&nbsp;    }
+<i class="no-highlight">256</i>&nbsp;
+<i class="no-highlight">257</i>&nbsp;    /**
+<i class="no-highlight">258</i>&nbsp;     * Sets the list for display, and generate random 
+<i class="no-highlight">259</i>&nbsp;     * 
+<i class="no-highlight">260</i>&nbsp;     * @param b list for display
+<i class="no-highlight">261</i>&nbsp;     * */
+<i class="no-highlight">262</i>&nbsp;    public void gen_coord_lst (ArrayList&lt;String&gt; b){
+<b class="fc"><i class="no-highlight">263</i>&nbsp;      coord_lst = new HashMap&lt;String,p&gt;();</b>
+<b class="fc"><i class="no-highlight">264</i>&nbsp;      Random rd = new Random();</b>
+<b class="fc"><i class="no-highlight">265</i>&nbsp;      for (String i: b){</b>
+<b class="fc"><i class="no-highlight">266</i>&nbsp;        coord_lst.put(i,new p((int)(rd.nextDouble()*resx)</b>
+<b class="fc"><i class="no-highlight">267</i>&nbsp;                              ,(int)(rd.nextDouble()*resy)));</b>
+<b class="fc"><i class="no-highlight">268</i>&nbsp;      }</b>
+<i class="no-highlight">269</i>&nbsp;
+<i class="no-highlight">270</i>&nbsp;    }
+<i class="no-highlight">271</i>&nbsp;
+<i class="no-highlight">272</i>&nbsp;    /**
+<i class="no-highlight">273</i>&nbsp;     * Hash to x
+<i class="no-highlight">274</i>&nbsp;     *  
+<i class="no-highlight">275</i>&nbsp;     * Takes a hash code and return a x-axis fitted value
+<i class="no-highlight">276</i>&nbsp;     * @param b a hash code
+<i class="no-highlight">277</i>&nbsp;     * */
+<i class="no-highlight">278</i>&nbsp;    public Integer htx(Integer b){
+<b class="nc"><i class="no-highlight">279</i>&nbsp;      return b%1563731%resx;</b>
+<i class="no-highlight">280</i>&nbsp;    }
+<i class="no-highlight">281</i>&nbsp;
+<i class="no-highlight">282</i>&nbsp;
+<i class="no-highlight">283</i>&nbsp;    /**
+<i class="no-highlight">284</i>&nbsp;     * Hash to y
+<i class="no-highlight">285</i>&nbsp;     * Takes a hash code and return a y-axis fitted value
+<i class="no-highlight">286</i>&nbsp;     * @param b a hash code
+<i class="no-highlight">287</i>&nbsp;     * */
+<i class="no-highlight">288</i>&nbsp;    public Integer hty(Integer b){
+<b class="nc"><i class="no-highlight">289</i>&nbsp;      return b%1563731%resy;</b>
+<i class="no-highlight">290</i>&nbsp;    }
+<i class="no-highlight">291</i>&nbsp;
+<i class="no-highlight">292</i>&nbsp;
+<i class="no-highlight">293</i>&nbsp;
+<i class="no-highlight">294</i>&nbsp;    /**
+<i class="no-highlight">295</i>&nbsp;     * Toggles Antialiasing for the display engine, on/off
+<i class="no-highlight">296</i>&nbsp;     * 
+<i class="no-highlight">297</i>&nbsp;     * 
+<i class="no-highlight">298</i>&nbsp;     * */
+<i class="no-highlight">299</i>&nbsp;    public void toggle_antialias(){
+<i class="no-highlight">300</i>&nbsp;
+<b class="fc"><i class="no-highlight">301</i>&nbsp;      antialias_view=antialias_view?false:true;</b>
+<i class="no-highlight">302</i>&nbsp;    }
+<i class="no-highlight">303</i>&nbsp;
+<i class="no-highlight">304</i>&nbsp;    /**
+<i class="no-highlight">305</i>&nbsp;     * Sets the board to be painted in the next repaint()/paintComponent()
+<i class="no-highlight">306</i>&nbsp;     * @param intx - the board to be painted;
+<i class="no-highlight">307</i>&nbsp;     * */
+<i class="no-highlight">308</i>&nbsp;    public void set_board_size( int intx, int inty){
+<b class="nc"><i class="no-highlight">309</i>&nbsp;      resx=intx*(dw+15);</b>
+<b class="nc"><i class="no-highlight">310</i>&nbsp;      resy=inty*(dh+15);</b>
+<b class="nc"><i class="no-highlight">311</i>&nbsp;      X=intx;</b>
+<b class="nc"><i class="no-highlight">312</i>&nbsp;      Y=inty;</b>
+<b class="nc"><i class="no-highlight">313</i>&nbsp;      w=resx/2/X;</b>
+<b class="nc"><i class="no-highlight">314</i>&nbsp;      h=resy/2/Y;</b>
+<i class="no-highlight">315</i>&nbsp;    }
+<i class="no-highlight">316</i>&nbsp;
+<i class="no-highlight">317</i>&nbsp;    /**
+<i class="no-highlight">318</i>&nbsp;     * Increases the size of the current display  
+<i class="no-highlight">319</i>&nbsp;     * 
+<i class="no-highlight">320</i>&nbsp;     * */
+<i class="no-highlight">321</i>&nbsp;    public void inc_size(){
+<b class="nc"><i class="no-highlight">322</i>&nbsp;      if (X==0) return;</b>
+<b class="nc"><i class="no-highlight">323</i>&nbsp;      resx+=20;</b>
+<b class="nc"><i class="no-highlight">324</i>&nbsp;      resy+=20;</b>
+<b class="nc"><i class="no-highlight">325</i>&nbsp;      w=resx/2/X;</b>
+<b class="nc"><i class="no-highlight">326</i>&nbsp;      h=resx/2/X;</b>
+<b class="nc"><i class="no-highlight">327</i>&nbsp;      repaint();</b>
+<i class="no-highlight">328</i>&nbsp;    }
+<i class="no-highlight">329</i>&nbsp;
+<i class="no-highlight">330</i>&nbsp;    /**
+<i class="no-highlight">331</i>&nbsp;     * Decrease the size of the current display
+<i class="no-highlight">332</i>&nbsp;     * 
+<i class="no-highlight">333</i>&nbsp;     * */
+<i class="no-highlight">334</i>&nbsp;    public void dec_size(){
+<b class="nc"><i class="no-highlight">335</i>&nbsp;      if (X==0) return;</b>
+<b class="nc"><i class="no-highlight">336</i>&nbsp;      resx-=20;</b>
+<b class="nc"><i class="no-highlight">337</i>&nbsp;      resy-=20;</b>
+<b class="nc"><i class="no-highlight">338</i>&nbsp;      w=resx/2/X;</b>
+<b class="nc"><i class="no-highlight">339</i>&nbsp;      h=resx/2/X;</b>
+<b class="nc"><i class="no-highlight">340</i>&nbsp;      repaint();</b>
+<i class="no-highlight">341</i>&nbsp;    }
+<i class="no-highlight">342</i>&nbsp;
+<i class="no-highlight">343</i>&nbsp;
+<i class="no-highlight">344</i>&nbsp;    /**
+<i class="no-highlight">345</i>&nbsp;     * 
+<i class="no-highlight">346</i>&nbsp;     * Sets the color of the color pallete #2; if you are looking to change the color pallete #1 (green), it cannot be changed.
+<i class="no-highlight">347</i>&nbsp;     * 
+<i class="no-highlight">348</i>&nbsp;     * */
+<i class="no-highlight">349</i>&nbsp;    public void set_color2(Color c){
+<b class="fc"><i class="no-highlight">350</i>&nbsp;      color2 = c;</b>
+<i class="no-highlight">351</i>&nbsp;    }
+<i class="no-highlight">352</i>&nbsp;
+<i class="no-highlight">353</i>&nbsp;    /**
+<i class="no-highlight">354</i>&nbsp;     * 
+<i class="no-highlight">355</i>&nbsp;     * Sets the color of the color pallete #3; if you are looking to change the color pallete #1 (green), it cannot be changed.
+<i class="no-highlight">356</i>&nbsp;     * 
+<i class="no-highlight">357</i>&nbsp;     * */
+<i class="no-highlight">358</i>&nbsp;    public void set_color3(Color c){
+<b class="fc"><i class="no-highlight">359</i>&nbsp;      color3 = c;</b>
+<i class="no-highlight">360</i>&nbsp;    }
+<i class="no-highlight">361</i>&nbsp;
+<i class="no-highlight">362</i>&nbsp;    /**
+<i class="no-highlight">363</i>&nbsp;     * Draw a dot on the display area at position (x,y) 
+<i class="no-highlight">364</i>&nbsp;     * @param x - x axis position 
+<i class="no-highlight">365</i>&nbsp;     * @param y - y axis position
+<i class="no-highlight">366</i>&nbsp;     * @param g - Graphics instance, also extends Graphics2D 
+<i class="no-highlight">367</i>&nbsp;     * 
+<i class="no-highlight">368</i>&nbsp;     * */
+<i class="no-highlight">369</i>&nbsp;    private void draw_dot(int x, int y, Graphics g){
+<b class="nc"><i class="no-highlight">370</i>&nbsp;      g.fillOval(fit(w)*x,fit(h)*y, w, h);</b>
+<i class="no-highlight">371</i>&nbsp;    }
+<i class="no-highlight">372</i>&nbsp;
+<i class="no-highlight">373</i>&nbsp;    /**
+<i class="no-highlight">374</i>&nbsp;     * Draw a dot on the display area at position (x,y) from offset ox and oy
+<i class="no-highlight">375</i>&nbsp;     * @param x - x axis position 
+<i class="no-highlight">376</i>&nbsp;     * @param y - y axis position
+<i class="no-highlight">377</i>&nbsp;     * @param g - Graphics instance, also extends Graphics2D 
+<i class="no-highlight">378</i>&nbsp;     * @param ox - offset of the x axis position
+<i class="no-highlight">379</i>&nbsp;     * @param oy - offset of the y axis position
+<i class="no-highlight">380</i>&nbsp;     * 
+<i class="no-highlight">381</i>&nbsp;     * */
+<i class="no-highlight">382</i>&nbsp;    private void draw_dot(int x, int y, Graphics g, int ox,int oy){
+<b class="nc"><i class="no-highlight">383</i>&nbsp;      g.fillOval(fit(w)*x+ox,fit(h)*y+oy, w, h);</b>
+<i class="no-highlight">384</i>&nbsp;    }
+<i class="no-highlight">385</i>&nbsp;
+<i class="no-highlight">386</i>&nbsp;    /**
+<i class="no-highlight">387</i>&nbsp;     * Draws the lines of the the edges
+<i class="no-highlight">388</i>&nbsp;     * */
+<i class="no-highlight">389</i>&nbsp;    public void draw_connections(Graphics2D g){
+<b class="fc"><i class="no-highlight">390</i>&nbsp;      g.setColor(color2);</b>
+<b class="fc"><i class="no-highlight">391</i>&nbsp;      for(String i: coord_lst.keySet()){</b>
+<b class="fc"><i class="no-highlight">392</i>&nbsp;        p a=coord_lst.get(i);</b>
+<b class="fc"><i class="no-highlight">393</i>&nbsp;        if(dot)g.fillRect(a.x,a.y,dotsz,dotsz); // toggle dot</b>
+<i class="no-highlight">394</i>&nbsp;        // Set&lt;String&gt; nlst = ;
+<b class="fc"><i class="no-highlight">395</i>&nbsp;        for (Object f: parent.infect.big_map.get(i)){</b>
+<b class="fc"><i class="no-highlight">396</i>&nbsp;          p b = coord_lst.get(f);</b>
+<i class="no-highlight">397</i>&nbsp;          // it = ;
+<b class="fc"><i class="no-highlight">398</i>&nbsp;          if(parent.infect.big_map.get_stat((String) f).get()==1){</b>
+<b class="fc"><i class="no-highlight">399</i>&nbsp;            if(outin ){</b>
+<b class="fc"><i class="no-highlight">400</i>&nbsp;              if(parent.infect.big_map.get_stat(i).get()!=1){</b>
+<b class="fc"><i class="no-highlight">401</i>&nbsp;                continue;</b>
+<i class="no-highlight">402</i>&nbsp;              }
+<i class="no-highlight">403</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">404</i>&nbsp;            g.setColor(color3);</b>
+<i class="no-highlight">405</i>&nbsp;          }
+<i class="no-highlight">406</i>&nbsp;
+<b class="fc"><i class="no-highlight">407</i>&nbsp;          else if(parent.infect.big_map.get_stat((String) f).get()==2){</b>
+<b class="fc"><i class="no-highlight">408</i>&nbsp;            if(outin ){</b>
+<b class="fc"><i class="no-highlight">409</i>&nbsp;              if(parent.infect.big_map.get_stat(i).get()!=2){</b>
+<b class="fc"><i class="no-highlight">410</i>&nbsp;                continue;</b>
+<i class="no-highlight">411</i>&nbsp;              }
+<i class="no-highlight">412</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">413</i>&nbsp;            g.setColor(color2);</b>
+<i class="no-highlight">414</i>&nbsp;          }
+<b class="fc"><i class="no-highlight">415</i>&nbsp;          else if(parent.infect.big_map.get_stat((String) f).get()==-1){</b>
+<b class="fc"><i class="no-highlight">416</i>&nbsp;            if(outin ){</b>
+<b class="fc"><i class="no-highlight">417</i>&nbsp;              if(parent.infect.big_map.get_stat(i).get()!=-1){</b>
+<b class="fc"><i class="no-highlight">418</i>&nbsp;                continue;</b>
+<i class="no-highlight">419</i>&nbsp;              }
+<i class="no-highlight">420</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">421</i>&nbsp;            g.setColor(color4);</b>
+<i class="no-highlight">422</i>&nbsp;          }
+<i class="no-highlight">423</i>&nbsp;          else {
+<b class="fc"><i class="no-highlight">424</i>&nbsp;            g.setColor(color1);</b>
+<b class="fc"><i class="no-highlight">425</i>&nbsp;            if(!enable_uninf)continue;</b>
+<i class="no-highlight">426</i>&nbsp;          }
+<i class="no-highlight">427</i>&nbsp;
+<b class="fc"><i class="no-highlight">428</i>&nbsp;          g.drawLine(a.x,a.y, b.x,b.y);</b>
+<b class="fc"><i class="no-highlight">429</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">430</i>&nbsp;      }</b>
+<i class="no-highlight">431</i>&nbsp;    } 
+<i class="no-highlight">432</i>&nbsp;
+<i class="no-highlight">433</i>&nbsp;    public void run(){
+<b class="fc"><i class="no-highlight">434</i>&nbsp;      if(coord_lst==null){</b>
+<b class="fc"><i class="no-highlight">435</i>&nbsp;        gen_coord_lst(parent.infect.big_map.get_all_str(parent.infect.big_map.gt()));</b>
+<i class="no-highlight">436</i>&nbsp;
+<i class="no-highlight">437</i>&nbsp;      }
+<b class="fc"><i class="no-highlight">438</i>&nbsp;      while(parent.action){</b>
+<i class="no-highlight">439</i>&nbsp;        // System.out.println(&quot;Interfacing thread...&quot;);
+<i class="no-highlight">440</i>&nbsp;
+<b class="fc"><i class="no-highlight">441</i>&nbsp;        parent.infect.get_update();</b>
+<b class="fc"><i class="no-highlight">442</i>&nbsp;        this.repaint();</b>
+<i class="no-highlight">443</i>&nbsp;        try{
+<b class="fc"><i class="no-highlight">444</i>&nbsp;          Thread.sleep((int)parent.fps);    // This is fixed for keeping the game logic consistent at all fps. </b>
+<i class="no-highlight">445</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">446</i>&nbsp;        catch(InterruptedException e){</b>
+<b class="nc"><i class="no-highlight">447</i>&nbsp;          System.out.println(&quot;Tick sleep interapted.&quot;);</b>
+<b class="fc"><i class="no-highlight">448</i>&nbsp;        }</b>
+<i class="no-highlight">449</i>&nbsp;      }
+<i class="no-highlight">450</i>&nbsp;    }
+<i class="no-highlight">451</i>&nbsp;
+<i class="no-highlight">452</i>&nbsp;    @Override
+<i class="no-highlight">453</i>&nbsp;    /**
+<i class="no-highlight">454</i>&nbsp;     * Calculates and displays rasterized (pixiel by pixiel) image of every frame in the simulation
+<i class="no-highlight">455</i>&nbsp;     * @param g - graphics instance for display
+<i class="no-highlight">456</i>&nbsp;     * */
+<i class="no-highlight">457</i>&nbsp;    public void paintComponent(Graphics g) {
+<b class="fc"><i class="no-highlight">458</i>&nbsp;      Graphics2D g2 = (Graphics2D)g;</b>
+<b class="fc"><i class="no-highlight">459</i>&nbsp;      g2.setColor(color1);</b>
+<b class="fc"><i class="no-highlight">460</i>&nbsp;      if(dis_hash_lst){</b>
+<b class="nc"><i class="no-highlight">461</i>&nbsp;        for(Integer i: hash_lst){</b>
+<b class="nc"><i class="no-highlight">462</i>&nbsp;          g2.fillRect(htx(i),hty(i),5,5);</b>
+<b class="nc"><i class="no-highlight">463</i>&nbsp;        }</b>
+<i class="no-highlight">464</i>&nbsp;      }
+<b class="fc"><i class="no-highlight">465</i>&nbsp;      if(dis_str_lst){</b>
+<b class="fc"><i class="no-highlight">466</i>&nbsp;        draw_connections(g2);</b>
+<i class="no-highlight">467</i>&nbsp;      }
+<b class="fc"><i class="no-highlight">468</i>&nbsp;      g2.setColor(new Color(0,0,0));</b>
+<i class="no-highlight">469</i>&nbsp;      // g2.fillOval(2,2,100,100);
+<i class="no-highlight">470</i>&nbsp;    }
+<i class="no-highlight">471</i>&nbsp;
+<i class="no-highlight">472</i>&nbsp;  /**
+<i class="no-highlight">473</i>&nbsp;     * Sets the board, and displays the board.
+<i class="no-highlight">474</i>&nbsp;     * @param bd - the board to be painted;
+<i class="no-highlight">475</i>&nbsp;     * */
+<i class="no-highlight">476</i>&nbsp;    public void display_board( int[][] bd){
+<b class="nc"><i class="no-highlight">477</i>&nbsp;      set_board(bd);</b>
+<b class="nc"><i class="no-highlight">478</i>&nbsp;      repaint();</b>
+<i class="no-highlight">479</i>&nbsp;    }
+<i class="no-highlight">480</i>&nbsp;
+<i class="no-highlight">481</i>&nbsp;  /**
+<i class="no-highlight">482</i>&nbsp;  *  Creates a copy of a board
+<i class="no-highlight">483</i>&nbsp;  *  @param board - the target board to be copied 
+<i class="no-highlight">484</i>&nbsp;  *  @return a copy of the board
+<i class="no-highlight">485</i>&nbsp;  * 
+<i class="no-highlight">486</i>&nbsp;  */
+<i class="no-highlight">487</i>&nbsp;  protected int[][] atomic_copy(int[][] board){
+<b class="nc"><i class="no-highlight">488</i>&nbsp;    int[][] copy_board = new int[X][Y];</b>
+<b class="nc"><i class="no-highlight">489</i>&nbsp;    for (int i=0;i&lt;X;i++){</b>
+<b class="nc"><i class="no-highlight">490</i>&nbsp;      for(int z=0;z&lt;Y;z++){</b>
+<b class="nc"><i class="no-highlight">491</i>&nbsp;        copy_board[i][z] = (board[i][z]);</b>
+<i class="no-highlight">492</i>&nbsp;      }
+<i class="no-highlight">493</i>&nbsp;    }
+<b class="nc"><i class="no-highlight">494</i>&nbsp;    return copy_board;</b>
+<i class="no-highlight">495</i>&nbsp;  }
+<i class="no-highlight">496</i>&nbsp;}
+<i class="no-highlight">497</i>&nbsp;
+<i class="no-highlight">498</i>&nbsp;class p {
+<i class="no-highlight">499</i>&nbsp;  Integer x;
+<i class="no-highlight">500</i>&nbsp;  Integer y;
+<i class="no-highlight">501</i>&nbsp;  public p(Integer ix, Integer iy){
+<i class="no-highlight">502</i>&nbsp;    x=ix;
+<i class="no-highlight">503</i>&nbsp;    y=iy;
+<i class="no-highlight">504</i>&nbsp;  }
+<i class="no-highlight">505</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-08-12 22:34</div>
+</div>
+</body>
+</html>

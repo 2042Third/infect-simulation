@@ -1,0 +1,181 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Stats</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: Stats (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Stats</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import java.sql.Array;
+<i class="no-highlight">2</i>&nbsp;import java.util.*;
+<i class="no-highlight">3</i>&nbsp;/**
+<i class="no-highlight">4</i>&nbsp; * Keeps track of the data collected.
+<i class="no-highlight">5</i>&nbsp; * Total number of population
+<i class="no-highlight">6</i>&nbsp; * Infection force
+<i class="no-highlight">7</i>&nbsp; * Number of infections
+<i class="no-highlight">8</i>&nbsp; * Number of new infections
+<i class="no-highlight">9</i>&nbsp; *
+<i class="no-highlight">10</i>&nbsp; * */
+<i class="no-highlight">11</i>&nbsp;public class VirusStats {
+<i class="no-highlight">12</i>&nbsp;    /**
+<i class="no-highlight">13</i>&nbsp;     * Initializes things
+<i class="no-highlight">14</i>&nbsp;     * */
+<i class="no-highlight">15</i>&nbsp;    public VirusStats() {
+<i class="no-highlight">16</i>&nbsp;      data = new LinkedList&lt;&gt;();
+<i class="no-highlight">17</i>&nbsp;    }
+<i class="no-highlight">18</i>&nbsp;    /**
+<i class="no-highlight">19</i>&nbsp;     * Stores and calculates the data from InfectSim
+<i class="no-highlight">20</i>&nbsp;     * @param sts Statistics of a round
+<i class="no-highlight">21</i>&nbsp;     * */
+<i class="no-highlight">22</i>&nbsp;    public void add(Stats sts){
+<i class="no-highlight">23</i>&nbsp;      /**
+<i class="no-highlight">24</i>&nbsp;       * Each data point:
+<i class="no-highlight">25</i>&nbsp;       * ary[0]: tick number
+<i class="no-highlight">26</i>&nbsp;       * ary[1]: total population
+<i class="no-highlight">27</i>&nbsp;       * ary[2]: infected population
+<i class="no-highlight">28</i>&nbsp;       * ary[3]: recovered population
+<i class="no-highlight">29</i>&nbsp;       * ary[4]: dead population
+<i class="no-highlight">30</i>&nbsp;       * */
+<i class="no-highlight">31</i>&nbsp;      ArrayList&lt;Integer&gt; tmp_ary=new ArrayList&lt;&gt;();
+<i class="no-highlight">32</i>&nbsp;      tmp_ary.add(sts.rn);
+<i class="no-highlight">33</i>&nbsp;      tmp_ary.add(sts.total_p);
+<i class="no-highlight">34</i>&nbsp;      tmp_ary.add(sts.infected_num);
+<i class="no-highlight">35</i>&nbsp;      tmp_ary.add(sts.recovered_num);
+<i class="no-highlight">36</i>&nbsp;      tmp_ary.add(sts.dead_num);
+<i class="no-highlight">37</i>&nbsp;      data.add(tmp_ary);
+<i class="no-highlight">38</i>&nbsp;
+<i class="no-highlight">39</i>&nbsp;      //System.out.println(data.get(data.size()-1));
+<i class="no-highlight">40</i>&nbsp;    }
+<i class="no-highlight">41</i>&nbsp;
+<i class="no-highlight">42</i>&nbsp;    /**
+<i class="no-highlight">43</i>&nbsp;     * Returns the latest data from data
+<i class="no-highlight">44</i>&nbsp;     * @return an array of data that represents the last tick
+<i class="no-highlight">45</i>&nbsp;     * */
+<i class="no-highlight">46</i>&nbsp;    public ArrayList&lt;Integer&gt; latest(){
+<i class="no-highlight">47</i>&nbsp;      return data.get(data.size()-1);
+<i class="no-highlight">48</i>&nbsp;    }
+<i class="no-highlight">49</i>&nbsp;    public LinkedList&lt;ArrayList&lt;Integer&gt;&gt; data;
+<i class="no-highlight">50</i>&nbsp;}
+<i class="no-highlight">51</i>&nbsp;/**
+<i class="no-highlight">52</i>&nbsp; * Every tick, InfectSim class should generate data for this class and give it to Virus Stats
+<i class="no-highlight">53</i>&nbsp; * */
+<i class="no-highlight">54</i>&nbsp;class Stats{
+<i class="no-highlight">55</i>&nbsp;    /**
+<i class="no-highlight">56</i>&nbsp;     * Takes the data given and store it
+<i class="no-highlight">57</i>&nbsp;     * @param n1 round number
+<i class="no-highlight">58</i>&nbsp;     * @param n2 total population
+<i class="no-highlight">59</i>&nbsp;     * @param n3 infected population
+<i class="no-highlight">60</i>&nbsp;     * @param n4 recovered population
+<i class="no-highlight">61</i>&nbsp;     * @param n5 dead population
+<i class="no-highlight">62</i>&nbsp;     * */
+<b class="fc"><i class="no-highlight">63</i>&nbsp;    public Stats(Integer n1,Integer n2, Integer n3, Integer n4,Integer n5){</b>
+<b class="fc"><i class="no-highlight">64</i>&nbsp;       rn = n1;</b>
+<b class="fc"><i class="no-highlight">65</i>&nbsp;       total_p=n2;</b>
+<b class="fc"><i class="no-highlight">66</i>&nbsp;       infected_num=n3;</b>
+<b class="fc"><i class="no-highlight">67</i>&nbsp;       recovered_num=n4;</b>
+<b class="fc"><i class="no-highlight">68</i>&nbsp;       dead_num=n5;</b>
+<i class="no-highlight">69</i>&nbsp;    }
+<i class="no-highlight">70</i>&nbsp;    public Integer rn;//Round number
+<i class="no-highlight">71</i>&nbsp;    public Integer total_p;//total population
+<i class="no-highlight">72</i>&nbsp;    public Integer infected_num;//total infected number
+<i class="no-highlight">73</i>&nbsp;    public Integer recovered_num;//total infected number
+<i class="no-highlight">74</i>&nbsp;    public Integer dead_num;//total infected number
+<i class="no-highlight">75</i>&nbsp;
+<i class="no-highlight">76</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-08-12 22:34</div>
+</div>
+</body>
+</html>
